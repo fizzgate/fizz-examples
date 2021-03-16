@@ -24,6 +24,7 @@
 
     <modules>
         <module>fizz-examples-dubbo</module>
+        <module>fizz-example-grpc</module>
     </modules>
 
     <build>

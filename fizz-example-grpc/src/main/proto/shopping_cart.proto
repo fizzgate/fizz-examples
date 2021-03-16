@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.fizzgate.fizz.examples.grpc.shopping.cart";
+option java_outer_classname = "ShoppingCartProto";
+
+package com.fizzgate.fizz.examples.grpc.shopping.cart;
+
+service ShoppingCartService {
+    rpc findByIdsAndName(FindByIdsAndName) returns (User) {}
+    rpc findByArrayIdsAndName(FindByArrayIdsAndName) returns (User) {}
+    rpc findByStringArray(FindByStringArray) returns (User) {}
+    rpc findByListId(FindByListId) returns (User) {}
+    rpc batchSave(BatchSave) returns (User) {}
+    rpc batchSaveAndNameAndId(BatchSaveAndNameAndId) returns (User) {}
+    rpc saveShoppingCart(ShoppingCart) returns (User) {}
+    rpc saveShoppingCartWithName(SaveShoppingCartWithName) returns (User) {}
+}
+
+message FindByIdsAndName {
+    repeated int32 ids = 1;
+    string name = 2;
+}
+
+message FindByArrayIdsAndName {
+    repeated int32 ids = 1;
+    string name = 2;
+}
+
+message FindByStringArray {
+    repeated string ids = 1;
+}
+
+message FindByListId {
+    repeated string ids = 1;
+}
+
+message BatchSave {
+    repeated User userList = 1;
+}
+
+message BatchSaveAndNameAndId {
+    repeated User userList = 1;
+    string id = 2;
+    string name = 3;
+}
+
+message ShoppingCart {
+    User user = 1;
+    repeated string goodsIdLists = 2;
+    map<string, string> detailGoodsMaps = 3;
+}
+
+message SaveShoppingCartWithName {
+    ShoppingCart shoppingCart = 1;
+    string name = 2;
+}
+
+message User {
+    string id = 1;
+    string name = 2;
+}
