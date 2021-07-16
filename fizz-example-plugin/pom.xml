@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.13.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.fizzgate</groupId>
+    <artifactId>fizz-example-plugin</artifactId>
+    <version>2.2.0-beta10</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>redis-auth-plugin</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-framework.version>5.2.13.RELEASE</spring-framework.version>
+        <spring-session-bom.version>Dragonfruit-SR3</spring-session-bom.version>
+        <reactor-bom.version>Dysprosium-SR21</reactor-bom.version>
+        <lettuce.version>5.3.7.RELEASE</lettuce.version>
+        <netty.version>4.1.65.Final</netty.version>
+        <httpcore.version>4.4.14</httpcore.version>
+        <log4j2.version>2.14.1</log4j2.version>
+        <slf4j.version>1.7.31</slf4j.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <lombok.version>1.18.20</lombok.version>
+        <apache.dubbo.version>2.7.5</apache.dubbo.version>
+        <grpc.version>1.16.1</grpc.version>
+        <mockito.version>3.4.6</mockito.version>
+        <curator.version>4.0.1</curator.version>
+        <zookeeper.version>3.5.9</zookeeper.version>
+        <commons-codec.version>1.15</commons-codec.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencyManagement></dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fizzgate</groupId>
+            <artifactId>fizz-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

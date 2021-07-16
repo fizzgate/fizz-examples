@@ -1,0 +1,104 @@
+# if you do not use Apollo, ignore the follow config
+################################################## Apollo config start ##################################################
+apollo:
+    # if use Apollo set this flag to true
+    enabled: false #use Apollo? (default:false)
+    bootstrap:
+        # if use Apollo set this flag to true
+        enabled: false #use Apollo?
+        namespaces: application #please input the apollo bootstrap namespaces (default:application)
+        eagerLoad:
+            # if use Apollo set this flag to true
+            enabled: false #use Apollo?
+################################################### Apollo config end ###################################################
+
+# if you do not use Eureka, ignore the follow config
+################################################## Eureka config start ##################################################
+eureka:
+    client:
+        # if use Eureka set this flag to true
+        enabled: false #use Eureka? (default:false)
+        serviceUrl:
+            # need replace
+            defaultZone: http://localhost:6600/eureka/ #please input the eureka client serviceUrl defaultZone (default:http://localhost:6600/eureka/)
+    instance:
+        prefer-ip-address: true
+################################################### Eureka config end ###################################################
+
+server:
+    port: 8600
+spring:
+    profiles:
+        active: default
+    application:
+        name: redis-auth-plugin
+    main:
+        allow-bean-definition-overriding: true
+    cloud:
+        loadbalancer:
+            ribbon:
+                enabled: false
+        nacos:
+            discovery:
+                # if use Nacos discovery set this flag to true
+                enabled: false #use Nacos Discovery? (default:false)
+                # need replace
+                server-addr: localhost:8848 #please input the nacos discovery server-addr (default:localhost:8848)
+                namespace: null #please input the nacos config type (default:null)
+                group: fizz-example-plugin #please input the nacos discovery register group (default:fizz-gateway)
+
+# Must use the same Redis as fizz-manager
+aggregate:
+    redis:
+        # need replace
+        host: 172.25.62.191 #please input the redis host (default:localhost)
+        # need replace
+        port: 6379 #please input the redis port (default:6379)
+        # need replace
+        password: 123456 #please input the redis password (default:123456)
+        # need replace
+        database: 10 #please input the redis database (default:9)
+proxy-webclient:
+    name: proxy
+aggr-webclient:
+    name: aggr
+fizz-web-client:
+    timeout: 20000
+fizz-dubbo-client:
+    address: zookeeper://127.0.0.1:2181
+log:
+    headers: COOKIE,FIZZ-APPID,FIZZ-SIGN,FIZZ-TS,FIZZ-RSV,HOST
+
+stat:
+    # switch for push access stat data
+    open: false
+send-log:
+    # switch for push log data
+    open: false
+sched:
+    executors: 2
+flowControl: false
+flow-stat-sched:
+    cron: 2/10 * * * * ?
+    dest: redis
+    queue: fizz_resource_access_stat
+
+gateway:
+    prefix: /proxy
+    aggr:
+        # set headers when calling the backend API
+        proxy_set_headers: X-Real-IP,X-Forwarded-Proto,X-Forwarded-For
+
+refresh-local-cache:
+    # initial delay 5 minutes
+    initial-delay-millis: 30000000
+    # fixed rate 5 minutes
+    fixed-rate-millis: 30000000
+    api-config-enabled: false
+    api-config-2-apps-enabled: false
+    aggregate-config-enabled: false
+    gateway-group-enabled: false
+    app-auth-enabled: false
+    flow-control-rule-enabled: false
+    rpc-service-enabled: false
+

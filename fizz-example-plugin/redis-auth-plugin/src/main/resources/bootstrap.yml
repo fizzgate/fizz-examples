@@ -1,0 +1,13 @@
+spring:
+    cloud:
+        nacos:
+            config:
+                enabled: false
+                server-addr: localhost:8848
+                namespace: null
+                group: fizz-example-plugin
+                prefix: application
+                extension-configs[0]:
+                    refresh: true
+                    data-id: ${spring.cloud.nacos.config.prefix}
+                    group: ${spring.cloud.nacos.config.group}
