@@ -34,13 +34,13 @@ public class RedisAuthPlugin implements FizzPluginFilter {
         log.info("custom plugin config: " + customConfig);
         doSomething();
 
-        String token = exchange.getRequest().getQueryParams().getFirst("token");
+        String tk = exchange.getRequest().getQueryParams().getFirst("token");
         return
-                redisTemplate.opsForValue().get(token).defaultIfEmpty(Constants.Symbol.EMPTY)
+                redisTemplate.opsForValue().get(tk).defaultIfEmpty(Constants.Symbol.EMPTY)
                         .flatMap(
                                 user -> {
                                     if (user == Constants.Symbol.EMPTY) {
-                                        return WebUtils.buildDirectResponse(exchange, HttpStatus.OK, null, "不存在 token " + token);
+                                        return WebUtils.buildDirectResponse(exchange, HttpStatus.OK, null, "不存在 token " + tk); // 拒绝当前请求
                                     } else {
                                         exchange.getAttributes().put("11", "22"); // 往后续插件或逻辑传递参数
                                         Mono next = FizzPluginFilterChain.next(exchange); // 执行下一个插件或后续逻辑

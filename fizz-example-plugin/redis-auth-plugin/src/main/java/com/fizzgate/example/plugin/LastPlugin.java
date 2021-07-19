@@ -21,6 +21,6 @@ public class LastPlugin implements FizzPluginFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, Map<String, Object> config) {
         log.info("last plugin work ...");
-        return WebUtils.buildDirectResponse(exchange, HttpStatus.OK, null, "last plugin response");
+        return WebUtils.buildDirectResponse(exchange, HttpStatus.OK, null, "response done");
     }
 }

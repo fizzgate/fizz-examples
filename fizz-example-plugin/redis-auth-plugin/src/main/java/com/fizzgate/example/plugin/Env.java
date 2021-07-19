@@ -41,7 +41,7 @@ public class Env {
         apiConfigService.serviceConfigMap.put(ac.service, sc);
         sc.add(ac);
 
-        redisTemplate.opsForValue().set("token", "user0").block(); // add redis config
+        redisTemplate.opsForValue().set("token0", "user0").block(); // add redis config
         log.info("example env ready");
     }
 }
