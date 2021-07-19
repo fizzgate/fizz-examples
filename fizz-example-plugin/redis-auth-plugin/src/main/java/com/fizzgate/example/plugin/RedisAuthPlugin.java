@@ -30,7 +30,7 @@ public class RedisAuthPlugin implements FizzPluginFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, Map<String, Object> config) {
-        String customConfig = (String) config.get(PluginConfig.CUSTOM_CONFIG);
+        String customConfig = (String) config.get(PluginConfig.CUSTOM_CONFIG); // 获取自定义的插件配置
         log.info("custom plugin config: " + customConfig);
         doSomething();
 
