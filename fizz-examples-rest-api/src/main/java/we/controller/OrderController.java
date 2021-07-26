@@ -33,15 +33,15 @@ import org.springframework.web.server.ServerWebExchange;
  *
  */
 @RestController
-public class UserController {
+public class OrderController {
 
 	/**
-	 * User list by page
+	 * Order list by page
 	 * 
 	 * @param exchange
 	 * @return
 	 */
-	@GetMapping(value = "/user/list")
+	@GetMapping(value = "/order/list")
 	public Object findUserList(@RequestParam("page") Integer page, ServerWebExchange exchange) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", 0);
@@ -58,24 +58,35 @@ public class UserController {
 
 		for (int i = offset; i < offset + pagesize; i++) {
 			int n = i + 1;
-			Map<String, Object> user = new HashMap<>();
-			user.put("userId", n);
-			user.put("userName", "user-" + n);
-			user.put("age", 20 + n % 5);
-			list.add(user);
+			Map<String, Object> order = new HashMap<>();
+			order.put("orderNo", n);
+			order.put("userId", n);
+			order.put("product", "大西瓜");
+			order.put("price", 9.90);
+			order.put("quantity", 2);
+			
+			Map<String, Object> address = new HashMap<>();
+			address.put("province", "广东");
+			address.put("city", "广州");
+			address.put("district", "海珠");
+			address.put("detailInfo", "xx路xx号");
+			
+			order.put("address", address);
+			order.put("remark", "abcddddddd");
+			list.add(order);
 		}
 
 		return result;
 	}
 
 	/**
-	 * User detail
+	 * Order detail
 	 * 
 	 * @param exchange
 	 * @return
 	 */
-	@GetMapping(value = "/user/detail")
-	public Object getUserDetail(@RequestParam("userId") Integer userId, ServerWebExchange exchange) {
+	@GetMapping(value = "/order/detail")
+	public Object getOrderDetail(@RequestParam("userId") Integer userId, @RequestParam("orderNo") Integer orderNo, ServerWebExchange exchange) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", 0);
 		result.put("message", "success");
@@ -84,18 +95,23 @@ public class UserController {
 			return null;
 		}
 
-		Map<String, Object> user = new HashMap<>();
-		user.put("userId", userId);
-		user.put("userName", "user-" + userId);
-		user.put("age", 20 + userId % 5);
-		user.put("email", "user-" + userId + "@fizzgate.com");
-		user.put("birthday", "2001-10-" + userId);
-		if (userId < 10) {
-			user.put("phone", "1380013800" + userId);
-		} else {
-			user.put("phone", "138001380" + userId);
-		}
-		result.put("data", user);
+		Map<String, Object> order = new HashMap<>();
+		order.put("orderNo", orderNo);
+		order.put("userId", userId);
+		order.put("product", "大西瓜");
+		order.put("price", 9.90);
+		order.put("quantity", 2);
+		
+		Map<String, Object> address = new HashMap<>();
+		address.put("province", "广东");
+		address.put("city", "广州");
+		address.put("district", "海珠");
+		address.put("detailInfo", "xx路xx号");
+		
+		order.put("address", address);
+		order.put("remark", "abcddddddd");
+		
+		result.put("data", order);
 
 		return result;
 	}

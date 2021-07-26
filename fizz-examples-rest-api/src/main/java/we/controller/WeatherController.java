@@ -16,9 +16,7 @@
  */
 package we.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,69 +31,51 @@ import org.springframework.web.server.ServerWebExchange;
  *
  */
 @RestController
-public class UserController {
+public class WeatherController {
 
 	/**
-	 * User list by page
+	 * 手机归属地
 	 * 
 	 * @param exchange
 	 * @return
 	 */
-	@GetMapping(value = "/user/list")
-	public Object findUserList(@RequestParam("page") Integer page, ServerWebExchange exchange) {
+	@GetMapping(value = "/weather/getMobileCodeInfo")
+	public Object findUserList(@RequestParam("mobile") String mobile, ServerWebExchange exchange) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", 0);
 		result.put("message", "success");
-		List<Map<String, Object>> list = new ArrayList<>();
-		result.put("data", list);
-
-		if (page == null || page > 5 || page < 1) {
-			return result;
+		Long n = Long.valueOf(mobile) % 2;
+		Map<String, Object> m = new HashMap<>();
+		if (n == 0) {
+			m.put("city", "广州");
+		} else {
+			m.put("city", "西安");
 		}
-
-		int pagesize = 5;
-		int offset = (page - 1) * pagesize;
-
-		for (int i = offset; i < offset + pagesize; i++) {
-			int n = i + 1;
-			Map<String, Object> user = new HashMap<>();
-			user.put("userId", n);
-			user.put("userName", "user-" + n);
-			user.put("age", 20 + n % 5);
-			list.add(user);
-		}
-
+		result.put("data", m);
 		return result;
 	}
 
 	/**
-	 * User detail
+	 * 根据城市查询天气
 	 * 
 	 * @param exchange
 	 * @return
 	 */
-	@GetMapping(value = "/user/detail")
-	public Object getUserDetail(@RequestParam("userId") Integer userId, ServerWebExchange exchange) {
+	@GetMapping(value = "/weather/getWeatherbyCityName")
+	public Object getWeatherbyCityName(@RequestParam("city") String city, ServerWebExchange exchange) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("code", 0);
 		result.put("message", "success");
-
-		if (userId == null || userId > 25 || userId < 1) {
-			return null;
-		}
-
-		Map<String, Object> user = new HashMap<>();
-		user.put("userId", userId);
-		user.put("userName", "user-" + userId);
-		user.put("age", 20 + userId % 5);
-		user.put("email", "user-" + userId + "@fizzgate.com");
-		user.put("birthday", "2001-10-" + userId);
-		if (userId < 10) {
-			user.put("phone", "1380013800" + userId);
+		Map<String, Object> m = new HashMap<>();
+		m.put("city", city);
+		if (city.equals("广州")) {
+			m.put("temp", "27度");
+			m.put("desc", "有雨");
 		} else {
-			user.put("phone", "138001380" + userId);
+			m.put("temp", "31度");
+			m.put("desc", "晴");
 		}
-		result.put("data", user);
+		result.put("data", m);
 
 		return result;
 	}
