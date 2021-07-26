@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
-import we.config.AggregateRedisConfig;
 import we.plugin.auth.*;
 import we.util.JacksonUtils;
 
@@ -24,8 +23,8 @@ public class Env {
     @Resource
     private ApiConfigService apiConfigService;
 
-    @Resource(name = AggregateRedisConfig.AGGREGATE_REACTIVE_REDIS_TEMPLATE)
-    private ReactiveStringRedisTemplate redisTemplate;
+    @Resource(name = RedisConfig.REACTIVE_STRING_REDIS_TEMPLATE)
+    private ReactiveStringRedisTemplate reactiveStringRedisTemplate;
 
     /**
      * init example env
@@ -41,7 +40,7 @@ public class Env {
         apiConfigService.serviceConfigMap.put(ac.service, sc);
         sc.add(ac);
 
-        redisTemplate.opsForValue().set("token0", "user0").block(); // add redis config
+        reactiveStringRedisTemplate.opsForValue().set("token0", "user0").block(); // add redis config
         log.info("example env ready");
     }
 }

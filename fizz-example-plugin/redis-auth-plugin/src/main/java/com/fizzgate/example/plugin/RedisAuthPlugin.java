@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import we.config.AggregateRedisConfig;
 import we.plugin.FizzPluginFilter;
 import we.plugin.FizzPluginFilterChain;
 import we.plugin.PluginConfig;
@@ -25,8 +24,8 @@ public class RedisAuthPlugin implements FizzPluginFilter {
 
     public static final String REDIS_AUTH_PLUGIN = "redisAuthPlugin";
 
-    @Resource(name = AggregateRedisConfig.AGGREGATE_REACTIVE_REDIS_TEMPLATE)
-    private ReactiveStringRedisTemplate redisTemplate;
+    @Resource(name = RedisConfig.REACTIVE_STRING_REDIS_TEMPLATE)
+    private ReactiveStringRedisTemplate reactiveStringRedisTemplate;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, Map<String, Object> config) {
@@ -36,7 +35,7 @@ public class RedisAuthPlugin implements FizzPluginFilter {
 
         String tk = exchange.getRequest().getQueryParams().getFirst("token");
         return
-                redisTemplate.opsForValue().get(tk).defaultIfEmpty(Constants.Symbol.EMPTY)
+                reactiveStringRedisTemplate.opsForValue().get(tk).defaultIfEmpty(Constants.Symbol.EMPTY)
                         .flatMap(
                                 user -> {
                                     if (user == Constants.Symbol.EMPTY) {
