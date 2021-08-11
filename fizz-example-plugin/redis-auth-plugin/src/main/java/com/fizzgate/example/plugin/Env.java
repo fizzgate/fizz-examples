@@ -34,7 +34,7 @@ public class Env {
         gatewayGroupService.currentGatewayGroupSet = Stream.of(GatewayGroup.DEFAULT).collect(Collectors.toSet()); // set current server belong to default gateway group
 
         // add route config for http://127.0.0.1:8600/proxy/xservice/ypath including redisAuthPlugin
-        String json = "{\"id\":666,\"isDeleted\":0,\"service\":\"xservice\",\"backendService\":\"service0\",\"fizzMethod\":\"AM\",\"path\":\"/ypath\",\"exactMatch\":true,\"backendPath\":\"/ypath\",\"access\":\"a\",\"pluginConfigs\":[{\"plugin\":\"redisAuthPlugin\", \"fixedConfig\":\"fc0\"},{\"plugin\":\"lastPlugin\"}],\"checkApp\":false,\"timeout\":0,\"proxyMode\":2}";
+        String json = "{\"id\":666,\"isDeleted\":0,\"service\":\"xservice\",\"backendService\":\"service0\",\"fizzMethod\":\"AM\",\"path\":\"/ypath\",\"exactMatch\":true,\"backendPath\":\"/ypath\",\"access\":\"a\",\"pluginConfigs\":[{\"plugin\":\"redisAuthPlugin\", \"fixedConfig\":\"fc0\"},{\"plugin\":\"lastPlugin\"}],\"checkApp\":false,\"timeout\":0,\"proxyMode\":3}";
         ApiConfig ac = JacksonUtils.readValue(json, ApiConfig.class);
         ServiceConfig sc = new ServiceConfig(ac.service);
         apiConfigService.serviceConfigMap.put(ac.service, sc);
