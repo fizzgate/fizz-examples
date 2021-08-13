@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
@@ -16,12 +17,15 @@ import we.plugin.FizzPluginFilterChain;
 import we.plugin.PluginConfig;
 import we.plugin.auth.ApiConfig;
 import we.proxy.FizzWebClient;
+import we.spring.http.server.reactive.ext.FizzServerHttpRequestDecorator;
 import we.util.Constants;
+import we.util.NettyDataBufferUtils;
 import we.util.ReactorUtils;
 import we.util.WebUtils;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,25 +49,41 @@ public class RedisAuthPlugin implements FizzPluginFilter {
         log.info("custom plugin config: " + customConfig);
         doSomething();
 
-        DataBuffer requestBody = WebUtils.getRequestBody(exchange); // 获取请求体
-        if (requestBody != null) {
-            String requestBodyStr = requestBody.toString(StandardCharsets.UTF_8);
-            log.info("request body: " + requestBodyStr);
-//            ApiConfig apiConfig = WebUtils.getApiConfig(exchange);
-//            apiConfig.type = ApiConfig.Type.REVERSE_PROXY;
-//            apiConfig.httpHostPorts = Stream.of("http://127.0.0.1:9094").collect(Collectors.toList());
+        FizzServerHttpRequestDecorator request = (FizzServerHttpRequestDecorator) exchange.getRequest();
 
-              // 若需调整转发到后端接口的请求体，可像下面这样设置新的体和类型，即可
-//            String newRequestBody = "client " + requestBodyStr;
-//            WebUtils.setConvertedRequestBody(exchange, newRequestBody); newRequestBody 也可以是 DataBuffer
-//            String newRequestBodyType = MediaType.APPLICATION_ATOM_XML_VALUE;
-//            WebUtils.appendHeader(exchange, HttpHeaders.CONTENT_TYPE, newRequestBodyType);
+        // 注意：非测试场景下，访问请求体，需为路由配置请求体插件
 
-//            WebFilterChain chain = exchange.getAttribute(FizzPluginFilterChain.WEB_FILTER_CHAIN);
-//            return chain.filter(exchange);
+        // DataBuffer requestBody = request.getRawBody();
+
+        /*
+        if (true) {
+            return
+            request.getBody().defaultIfEmpty(NettyDataBufferUtils.EMPTY_DATA_BUFFER)
+                             .single()
+                             .flatMap(
+                                     body -> {
+                                         String bodyStr = body.toString(StandardCharsets.UTF_8);
+                                         log.info("request body: " + bodyStr);
+                                         // return FizzPluginFilterChain.next(exchange);
+
+                                         ApiConfig apiConfig = WebUtils.getApiConfig(exchange);
+                                         apiConfig.type = ApiConfig.Type.REVERSE_PROXY;
+                                         apiConfig.httpHostPorts = Stream.of("http://127.0.0.1:9094").collect(Collectors.toList());
+
+                                         // 若需调整转发到后端接口的请求体，可像下面这样设置新的体和类型
+                                         String newRequestBody = "client " + bodyStr;
+                                         request.setBody(newRequestBody);
+                                         String newRequestBodyType = MediaType.APPLICATION_ATOM_XML_VALUE;
+                                         request.getHeaders().put(HttpHeaders.CONTENT_TYPE, Collections.singletonList(newRequestBodyType));
+
+                                         WebFilterChain chain = exchange.getAttribute(FizzPluginFilterChain.WEB_FILTER_CHAIN);
+                                         return chain.filter(exchange);
+                                     }
+                             );
         }
+        */
 
-        String tk = exchange.getRequest().getQueryParams().getFirst("token");
+        String tk = request.getQueryParams().getFirst("token");
         return
                 reactiveStringRedisTemplate.opsForValue().get(tk).defaultIfEmpty(Constants.Symbol.EMPTY)
                         .flatMap(
