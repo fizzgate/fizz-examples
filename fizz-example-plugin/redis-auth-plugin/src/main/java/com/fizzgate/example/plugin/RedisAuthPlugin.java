@@ -18,10 +18,7 @@ import we.plugin.PluginConfig;
 import we.plugin.auth.ApiConfig;
 import we.proxy.FizzWebClient;
 import we.spring.http.server.reactive.ext.FizzServerHttpRequestDecorator;
-import we.util.Constants;
-import we.util.NettyDataBufferUtils;
-import we.util.ReactorUtils;
-import we.util.WebUtils;
+import we.util.*;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
@@ -49,19 +46,22 @@ public class RedisAuthPlugin implements FizzPluginFilter {
         log.info("custom plugin config: " + customConfig);
         doSomething();
 
+        /*
+        你的 redis 配置也可放在 customConfig 中，解析出 host, port, password, database 后，可
+        if (reactiveStringRedisTemplate == null) {
+            reactiveStringRedisTemplate = ReactiveRedisHelper.getStringRedisTemplate("1.2.3.4", 6379, "123456", 10);
+        }
+        */
+
         FizzServerHttpRequestDecorator request = (FizzServerHttpRequestDecorator) exchange.getRequest();
 
-        // 注意：非测试场景下，访问请求体，需为路由配置请求体插件
-
-        // DataBuffer requestBody = request.getRawBody();
-
-        /*
+        /* 获取请求体，并执行相关操作；注意，访问请求体，需为路由配置请求体插件
         if (true) {
             return
             request.getBody().defaultIfEmpty(NettyDataBufferUtils.EMPTY_DATA_BUFFER)
                              .single()
                              .flatMap(
-                                     body -> {
+                                     body -> { // body 为请求体
                                          String bodyStr = body.toString(StandardCharsets.UTF_8);
                                          log.info("request body: " + bodyStr);
                                          // return FizzPluginFilterChain.next(exchange);
@@ -82,6 +82,8 @@ public class RedisAuthPlugin implements FizzPluginFilter {
                              );
         }
         */
+
+        // DataBuffer requestBody = request.getRawBody(); 获取请求体的另一种方式，request 需为 FizzServerHttpRequestDecorator 类型
 
         String tk = request.getQueryParams().getFirst("token");
         return
