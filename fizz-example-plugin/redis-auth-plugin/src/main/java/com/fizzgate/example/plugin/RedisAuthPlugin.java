@@ -83,8 +83,6 @@ public class RedisAuthPlugin implements FizzPluginFilter {
         }
         */
 
-        // DataBuffer requestBody = request.getRawBody(); 获取请求体的另一种方式，request 需为 FizzServerHttpRequestDecorator 类型
-
         String tk = request.getQueryParams().getFirst("token");
         return
                 reactiveStringRedisTemplate.opsForValue().get(tk).defaultIfEmpty(Constants.Symbol.EMPTY)
