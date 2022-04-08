@@ -36,11 +36,11 @@ import reactor.core.publisher.Mono;
 public class EchoController {
 
 	@GetMapping("/echo")
-	public Mono<String> echo(@RequestParam(value = "latency", required = false) int latency,
+	public Mono<String> echo(@RequestParam(value = "latency", required = false) Integer latency,
 			@RequestParam(value = "echo", required = false) String echo, ServerWebExchange exchange,
 			ServerHttpRequest request) {
 		// System.out.println("receive: " + echo);
-		if (latency > 0 && latency < 60 * 1000) {
+		if (latency != null && latency > 0 && latency < 60 * 1000) {
 			return Mono.just(echo != null ? echo : "ok").delayElement(Duration.ofMillis(latency));
 		} else {
 			return Mono.just(echo != null ? echo : "ok");
