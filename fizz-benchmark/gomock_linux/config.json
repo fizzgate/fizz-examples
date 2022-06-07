@@ -1,0 +1,23 @@
+{
+    "server": {
+        "address": "0.0.0.0",
+        "port": 9090,
+        "requestLog": false
+    },
+    "routes": [
+        {
+            "request":{
+                "method": "GET",
+                "url": "/mebSimpleInfo2k",
+                "sleepTime": 20
+            },
+            "response": {
+                "timestampToBody": true,
+                "status": 200,
+                "body": "",
+                "bodyFile": "./mebSimpleInfo2k.json"
+            }
+        }
+    ]
+}
+
