@@ -17,7 +17,9 @@
 package we.controller;
 
 import java.time.Duration;
+import java.util.Collections;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,4 +49,10 @@ public class EchoController {
 		}
 	}
 
+	@GetMapping("/echoheaders")
+	public Mono<String> echoheaders(ServerWebExchange exchange,
+			ServerHttpRequest request) {
+		HttpHeaders hds = request.getHeaders();
+		return Mono.just(hds.toString());
+	}
 }
